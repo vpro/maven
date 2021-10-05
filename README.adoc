@@ -1,1 +1,1 @@
-Dedicated Maven Docker images which provides additional file resources needed. We need this when running NPM builds with Maven in Openshift.
+Dedicated Maven Docker images which provides additional file resources needed.  
