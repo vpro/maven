@@ -1,5 +1,5 @@
 TARGET=vpro-maven:dev
-.PHONY: run
+.PHONY: help explore magnolia
 
 help:     ## Show this help.
 	@sed -n 's/^##//p' $(MAKEFILE_LIST)
