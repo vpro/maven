@@ -1,4 +1,4 @@
-TARGET=vpro-maven:dev
+TARGET=vpro/maven:dev
 .PHONY: help explore magnolia
 
 help:     ## Show this help.
