@@ -1,3 +1,7 @@
+---
+variables:
+   IMAGE_NAME: vpro/maven
+
 include:
   - project: 'shared/gitlab/gitlab-templates'
     ref: 'tags/4.12'

@@ -1,10 +1,11 @@
-FROM maven:3-openjdk-8-slim
+FROM maven:3-openjdk-11-slim
+
+LABEL maintainer=digitaal-techniek@vpro.nl
 
 ENV HOME=/home/ci
 
 ENV YQ_VERSION=v4.2.0
 ENV YQ_BINARY=yq_linux_amd64
-
 
 
 RUN mkdir -p /home/ci && \
