@@ -18,3 +18,4 @@ RUN  adduser ci --system --uid 1001 && \
     rm -f oc.tar  \
 
 USER 1001
+ENTRYPOINT bash
