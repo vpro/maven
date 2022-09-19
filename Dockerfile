@@ -2,7 +2,7 @@ FROM maven:3.8-eclipse-temurin-17
 
 LABEL maintainer=digitaal-techniek@vpro.nl
 
-ENV YQ_VERSION=v4.2.0
+ENV YQ_VERSION=v4.27.5
 ENV YQ_BINARY=yq_linux_amd64
 
 
