@@ -1,4 +1,4 @@
-FROM maven:3-openjdk-11-slim
+FROM maven:3.8-eclipse-temurin-17
 
 LABEL maintainer=digitaal-techniek@vpro.nl
 
