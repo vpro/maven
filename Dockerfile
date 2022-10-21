@@ -16,6 +16,7 @@ RUN apt-get -y update && apt-get install -y wget ssh git && \
     rm -f oc.tar && \
     mkdir /root/.ssh && \
     ssh-keyscan git.vpro.nl >/root/.ssh/known_hosts && \
+    ssh-keyscan files-digitaal.vpro.nl >>/root/.ssh/known_hosts && \
     chgrp -R 0 /root/.ssh && \
     chmod -R g=u /root/.ssh && \
     chmod +x /root/entrypoint.sh
