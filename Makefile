@@ -13,6 +13,10 @@ docker: Dockerfile  ## Build the docker file
 explore: docker    ## Just give bash on it
 	docker run --entrypoint bash -it $(TARGET)
 
+
+exploremaven:      ## just run the maven docker image
+	docker run --entrypoint bash -it $$(awk '$$1 == "FROM" {print $$2}' Dockerfile)
+
 magnolia:          ## Mount your magnolia checkout in it in /build. You can check whether it would build with this image
 	(cd ~/vpro/magnolia/trunk ; \
 	docker run -v `pwd`:/build -w /build --entrypoint bash -it $(TARGET))
