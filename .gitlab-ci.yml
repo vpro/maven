@@ -1,6 +1,7 @@
 ---
 variables:
-   IMAGE_NAME: vpro/maven
+   IMAGE_NAME: maven
+   NAMESPACE: vpro
 
 include:
   - project: 'shared/gitlab/gitlab-templates'
