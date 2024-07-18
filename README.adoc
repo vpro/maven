@@ -27,8 +27,8 @@ When running it expects an GITLAB_RUNNER_PRIVATE_KEY argument containing the pri
 ```
   docker run -it \
     --env "GITLAB_RUNNER_PRIVATE_KEY=$(cat ~/.ssh/id_rsa)" \
-    docker.vpro.nl/vpro/maven:latest \
-    /bin/bash -c "git clone git@git.vpro.nl:shared/docker/vpro-maven.git && cd maven-release && mvn release:prepare release:perform"
+    registry.npohosting.nl/poms/maven:latest \
+    /bin/bash -c "git clone git@gitlab.com/npo-identity/poms/poms-maven.git && cd maven-release && mvn release:prepare release:perform"
 ```
 
 
