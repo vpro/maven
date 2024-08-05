@@ -18,6 +18,7 @@ RUN apt-get -y update && apt-get install -y wget ssh git rsync && \
     mkdir -p /root/.ssh && \
     (ssh-keyscan git.vpro.nl >/root/.ssh/known_hosts ; echo "git.vpro.nl: $?") && \
     (ssh-keyscan files-digitaal.vpro.nl >>/root/.ssh/known_hosts ; echo "files-digitaal.vpro.nl: $?") && \
+    (ssh-keyscan gitlab.com >>/root/.ssh/known_hosts ; echo "gitlab.com: $?") && \
     ssh-keyscan github.com >>/root/.ssh/known_hosts && \
     chgrp -R 0 /root/.ssh && \
     chmod -R g=u /root/.ssh && \
