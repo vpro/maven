@@ -3,7 +3,7 @@ FROM maven:3.9.8-eclipse-temurin-21
 
 LABEL maintainer=digitaal-techniek@vpro.nl
 
-ENV YQ_VERSION=v4.40.5
+ENV YQ_VERSION=v4.44.3
 ENV YQ_BINARY=yq_linux_amd64
 
 ADD entrypoint.sh /root/entrypoint.sh
@@ -15,7 +15,7 @@ RUN apt-get -y update && apt-get install -y wget ssh git rsync && \
     mv oc /usr/local/bin && \
     chmod +x /usr/local/bin/oc && \
     rm -f oc.tar && \
-    mkdir -p /root/.ssh && \    
+    mkdir -p /root/.ssh && \
     (ssh-keyscan gitlab.com >/root/.ssh/known_hosts ; echo "gitlab.com: $?") && \
     ssh-keyscan github.com >>/root/.ssh/known_hosts && \
     chgrp -R 0 /root/.ssh && \
