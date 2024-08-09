@@ -1,9 +1,0 @@
----
-variables:
-   IMAGE_NAME: maven
-   NAMESPACE: poms
-
-include:
-  - project: 'npo-identity/poms/gitlab-templates'
-    ref: 'chp4'
-    file: 'docker_build.yml'
