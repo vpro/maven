@@ -4,7 +4,7 @@ Dedicated Maven Docker images which provides additional file resources needed.
 
 == Description
 
-A specialization of `maven:3.9-eclipse-temurin-21` providing also
+A specialization of https://hub.docker.com/_/maven/[`maven:3.9-eclipse-temurin-21`] providing also
 
 - openshift cli (oc)
 - yq (lightweight yaml processor)
