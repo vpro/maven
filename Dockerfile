@@ -1,5 +1,7 @@
 FROM maven:3.9.8-eclipse-temurin-21
 
+LABEL org.opencontainers.image.description="This image is used in CI/CD to build projects with maven"
+LABEL org.opencontainers.image.licenses="Apache-2.0"
 
 LABEL maintainer=digitaal-techniek@vpro.nl
 
