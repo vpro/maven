@@ -36,3 +36,4 @@ else
   date --iso-8601=seconds > public/date  
 fi
 source job.env
+exit 0
