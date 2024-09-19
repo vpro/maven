@@ -9,6 +9,7 @@ ENV YQ_VERSION=v4.44.3
 ENV YQ_BINARY=yq_linux_amd64
 
 ADD entrypoint.sh /root/entrypoint.sh
+ADD after_maven.sh /root/after_maven.sh
 
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget ssh git rsync file && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
@@ -27,6 +28,6 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget ssh git r
 
 WORKDIR /root
 
-ADD after_maven.sh /root/after_maven.sh
+
 
 ENTRYPOINT ["/root/entrypoint.sh"]

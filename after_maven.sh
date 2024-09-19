@@ -1,3 +1,7 @@
+#This script can be sourced after running maven
+# It will fill a fill and source a file 'job.env'
+# It will contain a few new variables
+
 setProperty(){
   if [ ! -e $3 ] ; then
     touch $3
