@@ -7,7 +7,6 @@ echo "MAVEN_TESTS_FAILED=${counts[1]}" | tee -a job.env
 echo "MAVEN_TESTS_ERROR=${counts[2]}" | tee -a job.env
 echo "MAVEN_TESTS_SKIPPED=${counts[3]}" | tee -a job.env
     
-mkdir -p public ; date --iso-8601=seconds > public/date
     
 # make sure some files exist otherwise 'reports' gets confused
 if [ ${counts[0]} -eq 0 ]; then
@@ -18,3 +17,10 @@ fi
 
 sort -u -o job.env job.env
 wc -l job.env
+
+if [ -d target/site ]; then 
+  cp -r target/site/* public  
+else  
+  mkdir -p public 
+  date --iso-8601=seconds > public/date  
+fi
