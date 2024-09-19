@@ -19,8 +19,8 @@ setProperty "MAVEN_TESTS_SKIPPED" "${counts[3]}" job.env
 # make sure some files exist otherwise 'reports' gets confused
 if [ ${counts[0]} -eq 0 ]; then
   echo no tests found. Making empty suites
-  mkdir -p a/target/surefire-reports ; echo '<testsuite />' >  a/target/surefire-reports/TEST-empty.xml 
-  mkdir -p a/target/failsafe-reports ; echo '<testsuite />' >  a/target/surefire-reports/TEST-empty.xml 
+  mkdir -p empty/target/surefire-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml 
+  mkdir -p empty/target/failsafe-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml 
 fi
 
 wc -l job.env
