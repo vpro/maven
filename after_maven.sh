@@ -11,7 +11,8 @@ setProperty(){
 }
 
 setProperty "PROJECT_VERSION" "$(mvn  -ntp help:evaluate -Dexpression=project.version -q -DforceStdout)" job.env
-counts=($(for d in `find . -name 'surefire-reports' -print` ; do cat $d/*.txt 2>/dev/null ; done | grep -E "^Tests run:" | awk -F'[, ]+' 'BEGIN {t=0; f=0; e=0; s=0}  {t+=$3; f+=$5; e+=$7; s+=$9} END {print t"\t"f"\t"e"\t"s}'))
+
+mapfile -t counts < <(find . -name 'surefire-reports' -exec cat \{\}/*.txt \; 2>/dev/null  | grep -E "^Tests run:" | awk -F'[, ]+' 'BEGIN {t=0; f=0; e=0; s=0}  {t+=$3; f+=$5; e+=$7; s+=$9} END {print t"\n"f"\n"e"\n"s}' )  
 
 setProperty "JOB_ID_BUILD_STAGE" "$CI_JOB_ID" job.env
 setProperty "MAVEN_TESTS_RUN" "${counts[0]}" job.env
@@ -36,4 +37,4 @@ else
   date --iso-8601=seconds > public/date  
 fi
 source job.env
-exit 0
+
