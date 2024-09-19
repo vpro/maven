@@ -24,3 +24,4 @@ else
   mkdir -p public 
   date --iso-8601=seconds > public/date  
 fi
+source job.env
