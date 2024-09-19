@@ -15,3 +15,6 @@ if [ ${counts[0]} -eq 0 ]; then
   mkdir -p a/target/surefire-reports ; echo '<testsuite />' >  a/target/surefire-reports/TEST-empty.xml 
   mkdir -p a/target/failsafe-reports ; echo '<testsuite />' >  a/target/surefire-reports/TEST-empty.xml 
 fi
+
+sort -u -o job.env job.env
+wc -l job.env
