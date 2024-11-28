@@ -24,7 +24,9 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget openssh-c
     ssh-keyscan github.com >>/root/.ssh/known_hosts && \
     chgrp -R 0 /root/.ssh && \
     chmod -R g=u /root/.ssh && \
-    chmod +x /root/entrypoint.sh
+    chmod +x /root/entrypoint.sh  && \
+    (echo -n "vpro/maven build time=" ; date -Iseconds) >> /DOCKER.BUILD
+
 
 WORKDIR /root
 

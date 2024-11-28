@@ -1,3 +1,7 @@
+TAG := $(shell git symbolic-ref -q --short HEAD || git describe --tags --exact-match)
+IMAGE := vpro/maven:$(TAG)
+MMIMAGE:=mmbase/maven:$(TAG)
+
 TARGET=vpro/maven:dev
 .PHONY: help explore magnolia
 
@@ -25,3 +29,13 @@ magnolia:          ## Mount your magnolia checkout in it in /build. You can chec
 
 clean:
 	rm docker
+
+
+# lets try to push a verison in docker.io, just to try out whether we then can  in gitlab'
+# 'Enable the Dependency Proxy to cache container images from Docker Hub and automatically clear the cache.'
+mmdocker: ## build image locally for upload in docker.io/mmbase
+	docker buildx  build --platform linux/amd64  -t $(MMIMAGE) .
+
+
+mmpush:
+	docker image push $(MMIMAGE)
