@@ -5,11 +5,12 @@ LABEL org.opencontainers.image.licenses="Apache-2.0"
 
 LABEL maintainer=digitaal-techniek@vpro.nl
 
-ENV YQ_VERSION=v4.44.3
+ENV YQ_VERSION=v4.45.1
 ENV YQ_BINARY=yq_linux_amd64
 
 ADD entrypoint.sh /root/entrypoint.sh
 ADD after_maven.sh /root/after_maven.sh
+ADD maven.sh /root/maven.sh
 
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget openssh-client git rsync file && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
