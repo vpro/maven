@@ -2,10 +2,7 @@
 # It will fill a fill and source a file 'job.env'
 # It will contain a few new variables
 
-if [ -z "$JOB_ENV" ]; then
-  echo "JOB_ENV not set, taking 'job.env'"
-  JOB_ENV=job.env
-fi
+JOB_ENV=${JOB_ENV:=job.env}
 
 
 setProperty(){
@@ -42,5 +39,6 @@ else
   mkdir -p public 
   date --iso-8601=seconds > public/date  
 fi
+
 source "$JOB_ENV"
 
