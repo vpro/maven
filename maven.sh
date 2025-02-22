@@ -11,6 +11,9 @@
  # TEST_FAILURE_IGNORE
  # SKIP_TESTS_IMPLICIT
 
+ # Locally you can test it like so:
+ # michiel@mitulo:(REL-8.5-SNAPSHOT,4)~/github/npo-poms/poms-parent-branch$ TRACE=true  ~/github/vpro/maven/maven.sh
+
 JOB_ENV=${JOB_ENV:=job.env}
 MAVEN_THREADS=${MAVEN_THREADS:=2}
 CI_PROJECT_DIR=${CI_PROJECT_DIR:=$(pwd)}
@@ -18,7 +21,6 @@ SKIP_TESTS=${SKIP_TESTS:=false}
 SKIP_INTEGRATION_TESTS=${SKIP_INTEGRATION_TESTS:=${SKIP_TESTS}}
 BUILD_TARGET=${BUILD_TARGET:=package}
 export MAVEN_ARGS=${MAVEN_ARGS:=--no-transfer-progress}
-EXIT=${EXIT:=true}
 
 if [ "$TRACE" == 'true' ]; then
  set -x
@@ -30,9 +32,7 @@ fi
 _exit() {
    set +x
    echo "exit $1" ;
-   if [ "$EXIT" == 'true' ]; then
-     exit $1
-   fi
+   exit $1
 }
 
 
