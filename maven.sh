@@ -37,7 +37,10 @@ _exit() {
 
 
 echo "repository:  $(find  $M2_ROOT/repository -type f  | wc -l) files, $(du -sh $M2_ROOT/repository)"
-if [ "$TRACE" == 'true' ]; then ls -l */target || true ; fi
+if [ "$TRACE" == 'true' ]; then
+  ls -l */target || true
+  mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout
+fi
 echo target $BUILD_TARGET
 mvn -ntp -T $MAVEN_THREADS \
       --fail-at-end \
