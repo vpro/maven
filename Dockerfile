@@ -12,6 +12,7 @@ ADD entrypoint.sh /root/entrypoint.sh
 ADD after_maven.sh /root/after_maven.sh
 ADD setup_maven.sh /root/setup_maven.sh
 ADD maven_release.sh /root/maven_release.sh
+ADD maven_branch.sh /root/maven_branch.sh
 ADD maven.sh /root/maven.sh
 
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget openssh-client git rsync file && \
