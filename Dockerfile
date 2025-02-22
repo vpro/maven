@@ -10,7 +10,7 @@ ENV YQ_BINARY=yq_linux_amd64
 
 ADD entrypoint.sh /root/entrypoint.sh
 ADD after_maven.sh /root/after_maven.sh
-ADD setup_maven.sh.sh /root/setup_maven.sh
+ADD setup_maven.sh /root/setup_maven.sh
 ADD maven.sh /root/maven.sh
 
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget openssh-client git rsync file && \
