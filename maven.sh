@@ -4,7 +4,6 @@
  # CI_PROJECT_DIR
  # BUILD_TARGET
  # MAVEN_THREADS
- # MAVEN_PROFILES_OPT
  # SKIP_TESTS
  # SKIP_INTEGRATION_TESTS
  # MAVEN_EXTRA_ARGS
@@ -17,6 +16,7 @@
 JOB_ENV=${JOB_ENV:=job.env}
 MAVEN_THREADS=${MAVEN_THREADS:=2}
 CI_PROJECT_DIR=${CI_PROJECT_DIR:=$(pwd)}
+M2_ROOT=${M2_ROOT:=$CI_PROJECT_DIR/.m2}
 SKIP_TESTS=${SKIP_TESTS:=false}
 SKIP_INTEGRATION_TESTS=${SKIP_INTEGRATION_TESTS:=${SKIP_TESTS}}
 BUILD_TARGET=${BUILD_TARGET:=package}
@@ -36,15 +36,13 @@ _exit() {
 }
 
 
-if [ "$TRACE" == 'true' ]; then echo "check cache size" && du -sh $CI_PROJECT_DIR/.m2/repository || true ; fi
-if [ "$TRACE" == 'true' ]; then echo "file number" && (find  $CI_PROJECT_DIR/.m2/repository -type f  || true) | wc -l ; fi
+echo "repository:  $(find  $M2_ROOT/repository -type f  | wc -l) files, $(du -sh $M2_ROOT/repository)"
 if [ "$TRACE" == 'true' ]; then ls -l */target || true ; fi
 echo target $BUILD_TARGET
 mvn -ntp -T $MAVEN_THREADS \
       --fail-at-end \
       -U \
       --batch-mode \
-      $MAVEN_PROFILES_OPT \
       -DskipTests=$SKIP_TESTS \
       -DskipITs=$SKIP_INTEGRATION_TESTS \
        -Dmaven.test.failure.ignore=true  `: # Just use the result from after_maven.sh` \
