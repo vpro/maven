@@ -17,19 +17,23 @@ CI_PROJECT_DIR=${CI_PROJECT_DIR:=$(pwd)}
 SKIP_TESTS=${SKIP_TESTS:=false}
 SKIP_INTEGRATION_TESTS=${SKIP_INTEGRATION_TESTS:=${SKIP_TESTS}}
 BUILD_TARGET=${BUILD_TARGET:=package}
+export MAVEN_ARGS=${MAVEN_ARGS:=--no-transfer-progress}
 EXIT=${EXIT:=true}
 
 if [ "$TRACE" == 'true' ]; then
-  set -x
- fi
+ set -x
+ env
+else
+  set +x
+fi
 
- _exit() {
+_exit() {
    set +x
    echo "exit $1" ;
    if [ "$EXIT" == 'true' ]; then
      exit $1
    fi
- }
+}
 
 
 if [ "$TRACE" == 'true' ]; then echo "check cache size" && du -sh $CI_PROJECT_DIR/.m2/repository || true ; fi
@@ -44,7 +48,7 @@ mvn -ntp -T $MAVEN_THREADS \
       -DskipTests=$SKIP_TESTS \
       -DskipITs=$SKIP_INTEGRATION_TESTS \
        -Dmaven.test.failure.ignore=true  `: # Just use the result from after_maven.sh` \
-      $MAVEN_ARGS $MAVEN_EXTRA_ARGS $BUILD_TARGET  ; result=$?
+       $BUILD_TARGET  ; result=$?
 echo "maven exit code: $result"
 "${BASH_SOURCE%/*}/after_maven.sh"
 source "$JOB_ENV"
