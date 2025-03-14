@@ -49,7 +49,7 @@ mvn -ntp -T $MAVEN_THREADS \
       -DskipTests=$SKIP_TESTS \
       -DskipITs=$SKIP_INTEGRATION_TESTS \
        -Dmaven.test.failure.ignore=true  `: # Just use the result from after_maven.sh` \
-       "$BUILD_TARGET"  ; result=$?
+       $BUILD_TARGET  ; result=$?
 echo "maven exit code: $result"
 "${BASH_SOURCE%/*}/after_maven.sh"
 source "$JOB_ENV"
