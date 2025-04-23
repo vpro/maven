@@ -3,6 +3,7 @@
 # It will contain a few new variables
 
 JOB_ENV=${JOB_ENV:=job.env}
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 
 setProperty(){
@@ -15,7 +16,11 @@ setProperty(){
 
 setProperty "PROJECT_VERSION" "$(mvn  -ntp help:evaluate -Dexpression=project.version -q -DforceStdout)" $JOB_ENV
 
-mapfile -t counts < <(find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.txt' -print0   \; | xargs -0 cat 2>/dev/null  | grep -E "^Tests run:" | awk -F'[, ]+' 'BEGIN {t=0; f=0; e=0; s=0}  {t+=$3; f+=$5; e+=$7; s+=$9} END {print t"\n"f"\n"e"\n"s}' )
+if command -v xsltproc > /dev/null ; then
+    mapfile -t counts < <(find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; | xargs -0 xsltproc ${SCRIPT_DIR}/count.xslt | grep -E "^Tests run:" | awk -F'[, ]+' 'BEGIN {t=0; f=0; e=0; s=0}  {t+=$3; f+=$5; e+=$7; s+=$9} END {print t"\n"f"\n"e"\n"s}' )
+else
+  mapfile -t counts < <(find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.txt' -print0   \; | xargs -0 cat 2>/dev/null  | grep -E "^Tests run:" | awk -F'[, ]+' 'BEGIN {t=0; f=0; e=0; s=0}  {t+=$3; f+=$5; e+=$7; s+=$9} END {print t"\n"f"\n"e"\n"s}' )
+fi
 
 setProperty "JOB_ID_BUILD_STAGE" "$CI_JOB_ID" $JOB_ENV
 setProperty "MAVEN_TESTS_RUN" "${counts[0]}" $JOB_ENV

@@ -14,8 +14,10 @@ ADD setup_maven.sh /root/setup_maven.sh
 ADD maven_release.sh /root/maven_release.sh
 ADD maven_branch.sh /root/maven_branch.sh
 ADD maven.sh /root/maven.sh
+ADD count.xslt /root/count.xslt
 
-RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget openssh-client git rsync file && \
+
+RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget openssh-client git rsync file xsltproc && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}.tar.gz -O - | tar xz && mv ${YQ_BINARY} /usr/bin/yq && \
     curl -fsSL https://downloads-openshift-console.apps.cluster.chp5-prod.npocloud.nl/amd64/linux/oc.tar --output oc.tar && \
