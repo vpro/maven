@@ -26,13 +26,13 @@ setProperty "MAVEN_TESTS_SKIPPED" "${counts[3]}" "$JOB_ENV"
     
     
 # make sure some files exist otherwise 'reports' gets confused
-if [ ${counts[0]} -eq 0 ]; then
+if [ "${counts[0]}" -eq 0 ]; then
   echo no tests found. Making empty suites
   mkdir -p empty/target/surefire-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml 
   mkdir -p empty/target/failsafe-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml 
 fi
 
-wc -l $JOB_ENV
+wc -l "$JOB_ENV"
 
 if [ -d target/site ]; then 
   cp -r target/site/* public  
