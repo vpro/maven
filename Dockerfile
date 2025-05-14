@@ -5,8 +5,7 @@ LABEL org.opencontainers.image.licenses="Apache-2.0"
 
 LABEL maintainer=digitaal-techniek@vpro.nl
 
-ENV YQ_VERSION=v4.45.1
-ENV YQ_BINARY=yq_linux_amd64
+ENV YQ_VERSION=v4.45.4
 
 ADD entrypoint.sh /root/entrypoint.sh
 ADD after_maven.sh /root/after_maven.sh
@@ -19,6 +18,8 @@ ADD count.xslt /root/count.xslt
 
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget openssh-client git rsync file xsltproc && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    export ARCH=`dpkg --print-architecture` && \
+    export YQ_BINARY=yq_linux_${ARCH} && \
     wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}.tar.gz -O - | tar xz && mv ${YQ_BINARY} /usr/bin/yq && \
     curl -fsSL https://downloads-openshift-console.apps.cluster.chp5-prod.npocloud.nl/amd64/linux/oc.tar --output oc.tar && \
     tar xvf oc.tar && \
