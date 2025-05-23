@@ -23,6 +23,10 @@ setProperty "MAVEN_TESTS_RUN" "${counts[0]}" "$JOB_ENV"
 setProperty "MAVEN_TESTS_FAILED" "${counts[1]}" "$JOB_ENV"
 setProperty "MAVEN_TESTS_ERROR" "${counts[2]}" "$JOB_ENV"
 setProperty "MAVEN_TESTS_SKIPPED" "${counts[3]}" "$JOB_ENV"
+setProperty "SKIP_TESTS" "${SKIP_TESTS}" "$JOB_ENV"
+setProperty "SKIP_TESTS_IMPLICIT" "${SKIP_TESTS_IMPLICIT}" "$JOB_ENV"
+
+
     
     
 # make sure some files exist otherwise 'reports' gets confused
