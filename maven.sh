@@ -44,7 +44,7 @@ if [ "$TRACE" == 'true' ]; then
   echo "==============EFFECTIVE POM"
   mvn help:effective-pom -q -Doutput=effective-pom.xml ;  wc -l effective-pom.xml
   echo "==============EFFECTIVE SETTINGS"
-  mvn help:effective-settings
+  mvn help:effective-settings -q -Doutput=effective-settings.xml ; cat effective-settings.xml
 fi
 echo target $BUILD_TARGET
 mvn -ntp -T $MAVEN_THREADS \
