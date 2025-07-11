@@ -1,7 +1,6 @@
  # This can be sourced in gitlab build
  # it recognizes
  # TRACE
- # CI_PROJECT_DIR
  # BUILD_TARGET
  # MAVEN_THREADS
  # SKIP_TESTS
@@ -15,8 +14,6 @@
 
 JOB_ENV=${JOB_ENV:=job.env}
 MAVEN_THREADS=${MAVEN_THREADS:=2}
-CI_PROJECT_DIR=${CI_PROJECT_DIR:=$(pwd)}
-M2_ROOT=${M2_ROOT:=$CI_PROJECT_DIR/.m2}
 SKIP_TESTS=${SKIP_TESTS:=false}
 SKIP_INTEGRATION_TESTS=${SKIP_INTEGRATION_TESTS:=${SKIP_TESTS}}
 BUILD_TARGET=${BUILD_TARGET:=package}
@@ -39,12 +36,13 @@ _exit() {
 if [ "$TRACE" == 'true' ]; then
   ls -l */target 2>/dev/null || true
   echo "==============REPOSITORY"
-  echo "Used repo:" $(mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout)
-  echo "$(find  $M2_ROOT/repository -type f  2>/dev/null | wc -l) files, $(du -sh $M2_ROOT/repository 2> /dev/null | awk '{print $1}')"
+  M2_REPO=$(mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout)
+  echo "Used settings.localRepository: $M2_REPO"
+  echo "$(find  $M2_REPO -type f  2>/dev/null | wc -l) files, $(du -sh $M2_REPO /repository 2> /dev/null | awk '{print $1}')"
   echo "==============ACTIVE PROFILES"
-  mvn help:active-profiles
+  mvn help:active-profiles | tee -a active-profiles.txt | grep -v '^\[' | grep .
   echo "==============EFFECTIVE POM"
-  mvn help:effective-pom
+  mvn help:effective-pom > effective-pom.xml ;  wc -l effective-pom.xml
   echo "==============EFFECTIVE SETTINGS"
   mvn help:effective-settings
 fi
