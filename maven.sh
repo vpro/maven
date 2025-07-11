@@ -19,20 +19,14 @@ SKIP_INTEGRATION_TESTS=${SKIP_INTEGRATION_TESTS:-${SKIP_TESTS}}
 BUILD_TARGET=${1:-${BUILD_TARGET:-package}}
 export MAVEN_ARGS=${MAVEN_ARGS:=--no-transfer-progress}
 
-echo "Threads: $MAVEN_THREADS"
-if [ "$TRACE" == 'true' ]; then
- echo "Trace: $TRACE"
- set -x
- env
-else
-  set +x
-fi
 
+OLD_X=${-//[^x]/}
 _exit() {
-   set +x
+   if [[ -n "$OLD_X" ]]; then set -x; else set +x; fi
    echo "exit $1" ;
    exit $1
 }
+set +x
 if [ "$MAVEN_PROFILES" != "" ] ; then
   PROFILES="-P${MAVEN_PROFILES}"
   echo "Using profiles: $PROFILES"
@@ -52,8 +46,13 @@ if [ "$TRACE" == 'true' ]; then
   mvn $PROFILES help:effective-pom -q -Doutput=effective-pom.xml ;  wc -l effective-pom.xml
   echo "==============EFFECTIVE SETTINGS"
   mvn $PROFILES help:effective-settings -q -Doutput=effective-settings.xml ; cat effective-settings.xml
+  set -x
+  env
+else
+  set +x
 fi
 echo target $BUILD_TARGET
+echo "Threads: $MAVEN_THREADS"
 
 mvn -ntp -T $MAVEN_THREADS \
       --fail-at-end \
@@ -73,3 +72,4 @@ if [ "$TEST_FAILURE_IGNORE" != "true" ] && [ "$SKIP_TESTS_IMPLICIT" != "true" ] 
    if [ $MAVEN_TESTS_FAILED -ge 1 ]; then echo "Failed test cases ($MAVEN_TESTS_FAILED). Exit 3";  _exit 3 ; fi
 fi
 if [[ $result -ne 0 ]]; then echo "Failed build exit $result"; _exit $((100 + $result)) ; fi
+_exit 0
