@@ -12,15 +12,16 @@
  # Locally you can test it like so:
  # michiel@mitulo:(REL-8.5-SNAPSHOT,4)~/github/npo-poms/poms-parent-branch$ TRACE=true  ~/github/vpro/maven/maven.sh
 
-JOB_ENV=${JOB_ENV:=job.env}
-MAVEN_THREADS=${MAVEN_THREADS:=2}
-SKIP_TESTS=${SKIP_TESTS:=false}
-SKIP_INTEGRATION_TESTS=${SKIP_INTEGRATION_TESTS:=${SKIP_TESTS}}
-BUILD_TARGET=${BUILD_TARGET:=package}
+JOB_ENV=${JOB_ENV:-job.env}
+MAVEN_THREADS=${MAVEN_THREADS:-2}
+SKIP_TESTS=${SKIP_TESTS:-false}
+SKIP_INTEGRATION_TESTS=${SKIP_INTEGRATION_TESTS:-${SKIP_TESTS}}
+BUILD_TARGET=${BUILD_TARGET:-${1:-package}}
 export MAVEN_ARGS=${MAVEN_ARGS:=--no-transfer-progress}
 
-echo "Trace: $TRACE"
+echo "Threads: $MAVEN_THREADS"
 if [ "$TRACE" == 'true' ]; then
+ echo "Trace: $TRACE"
  set -x
  env
 else
@@ -61,8 +62,7 @@ mvn -ntp -T $MAVEN_THREADS \
       -DskipTests=$SKIP_TESTS \
       -DskipITs=$SKIP_INTEGRATION_TESTS \
        -Dmaven.test.failure.ignore=true  `: # Just use the result from after_maven.sh` \
-       $PROFILES \
-       $BUILD_TARGET  ; result=$?
+       $PROFILES $BUILD_TARGET  ; result=$?
 echo "maven exit code: $result"
 "${BASH_SOURCE%/*}/after_maven.sh"
 source "$JOB_ENV"
