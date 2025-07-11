@@ -47,6 +47,12 @@ if [ "$TRACE" == 'true' ]; then
   mvn help:effective-settings -q -Doutput=effective-settings.xml ; cat effective-settings.xml
 fi
 echo target $BUILD_TARGET
+if [ "$MAVEN_PROFILES" != "" ] ; then
+  PROFILES="-P${MAVEN_PROFILES}"
+  echo "Using profiles: $PROFILES"
+else
+  PROFILES=""
+fi
 mvn -ntp -T $MAVEN_THREADS \
       --fail-at-end \
       -U \
@@ -54,6 +60,7 @@ mvn -ntp -T $MAVEN_THREADS \
       -DskipTests=$SKIP_TESTS \
       -DskipITs=$SKIP_INTEGRATION_TESTS \
        -Dmaven.test.failure.ignore=true  `: # Just use the result from after_maven.sh` \
+       $PROFILES \
        $BUILD_TARGET  ; result=$?
 echo "maven exit code: $result"
 "${BASH_SOURCE%/*}/after_maven.sh"
