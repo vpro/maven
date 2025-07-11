@@ -42,7 +42,7 @@ if [ "$TRACE" == 'true' ]; then
   echo "==============ACTIVE PROFILES"
   mvn help:active-profiles | tee -a active-profiles.txt | grep -v '^\[' | grep .
   echo "==============EFFECTIVE POM"
-  mvn help:effective-pom > effective-pom.xml ;  wc -l effective-pom.xml
+  mvn help:effective-pom -q -Doutput=effective-pom.xml ;  wc -l effective-pom.xml
   echo "==============EFFECTIVE SETTINGS"
   mvn help:effective-settings
 fi
