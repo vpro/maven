@@ -39,8 +39,8 @@ if [ "$TRACE" == 'true' ]; then
   M2_REPO=$(mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout)
   echo "Used settings.localRepository: $M2_REPO"
   echo "$(find  $M2_REPO -type f  2>/dev/null | wc -l) files, $(du -sh $M2_REPO /repository 2> /dev/null | awk '{print $1}')"
-  echo "==============ACTIVE PROFILES"
-  mvn help:active-profiles | tee -a active-profiles.txt | grep -v '^\[' | grep .
+  echo "==============PROFILES"
+  mvn help:all-profiles | tee -a all-profiles.txt | grep -v '^\[' | grep .
   echo "==============EFFECTIVE POM"
   mvn help:effective-pom -q -Doutput=effective-pom.xml ;  wc -l effective-pom.xml
   echo "==============EFFECTIVE SETTINGS"
