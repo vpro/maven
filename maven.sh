@@ -36,7 +36,7 @@ _exit() {
 }
 
 
-echo "repository:  $(find  $M2_ROOT/repository -type f  | wc -l) files, $(du -sh $M2_ROOT/repository)"
+echo "repository:  $(find  $M2_ROOT/repository -type f  2>/dev/null | wc -l) files, $(du -sh $M2_ROOT/repository)"
 if [ "$TRACE" == 'true' ]; then
   ls -l */target || true
   mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout
