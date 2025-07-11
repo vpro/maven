@@ -32,27 +32,28 @@ _exit() {
    echo "exit $1" ;
    exit $1
 }
-
-if [ "$TRACE" == 'true' ]; then
-  ls -l */target 2>/dev/null || true
-  echo "==============REPOSITORY"
-  M2_REPO=$(mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout)
-  echo "Used settings.localRepository: $M2_REPO"
-  echo "$(find  $M2_REPO -type f  2>/dev/null | wc -l) files, $(du -sh $M2_REPO /repository 2> /dev/null | awk '{print $1}')"
-  echo "==============PROFILES"
-  mvn help:all-profiles | tee -a all-profiles.txt | grep -v '^\[' | grep .
-  echo "==============EFFECTIVE POM"
-  mvn help:effective-pom -q -Doutput=effective-pom.xml ;  wc -l effective-pom.xml
-  echo "==============EFFECTIVE SETTINGS"
-  mvn help:effective-settings -q -Doutput=effective-settings.xml ; cat effective-settings.xml
-fi
-echo target $BUILD_TARGET
 if [ "$MAVEN_PROFILES" != "" ] ; then
   PROFILES="-P${MAVEN_PROFILES}"
   echo "Using profiles: $PROFILES"
 else
   PROFILES=""
 fi
+
+if [ "$TRACE" == 'true' ]; then
+  ls -l */target 2>/dev/null || true
+  echo "==============REPOSITORY"
+  M2_REPO=$(mvn $PROFILES help:evaluate -Dexpression=settings.localRepository -q -DforceStdout)
+  echo "Used settings.localRepository: $M2_REPO"
+  echo "$(find  $M2_REPO -type f  2>/dev/null | wc -l) files, $(du -sh $M2_REPO /repository 2> /dev/null | awk '{print $1}')"
+  echo "==============PROFILES"
+  mvn $PROFILES help:all-profiles | tee -a all-profiles.txt | grep -v '^\[' | grep .
+  echo "==============EFFECTIVE POM"
+  mvn $PROFILES help:effective-pom -q -Doutput=effective-pom.xml ;  wc -l effective-pom.xml
+  echo "==============EFFECTIVE SETTINGS"
+  mvn $PROFILES help:effective-settings -q -Doutput=effective-settings.xml ; cat effective-settings.xml
+fi
+echo target $BUILD_TARGET
+
 mvn -ntp -T $MAVEN_THREADS \
       --fail-at-end \
       -U \
