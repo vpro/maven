@@ -39,7 +39,14 @@ _exit() {
 echo "repository:  $(find  $M2_ROOT/repository -type f  2>/dev/null | wc -l) files, $(du -sh $M2_ROOT/repository)"
 if [ "$TRACE" == 'true' ]; then
   ls -l */target || true
-  mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout
+  echo "==============REPOSITORY"
+  echo "Used repo:" $(mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout)
+  echo "==============ACTIVE PROFILES"
+  mvn help:active-profiles
+  echo "==============EFFECTIVE POM"
+  mvn help:effective-pom
+  echo "==============EFFECTIVE SETTINGS"
+  mvn help:effective-settings
 fi
 echo target $BUILD_TARGET
 mvn -ntp -T $MAVEN_THREADS \
