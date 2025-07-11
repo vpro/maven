@@ -37,7 +37,7 @@ _exit() {
 }
 
 if [ "$TRACE" == 'true' ]; then
-  ls -l */target || true
+  ls -l */target 2>/dev/null || true
   echo "==============REPOSITORY"
   echo "Used repo:" $(mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout)
   echo "$(find  $M2_ROOT/repository -type f  2>/dev/null | wc -l) files, $(du -sh $M2_ROOT/repository 2> /dev/null | awk '{print $1}')"
