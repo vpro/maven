@@ -10,14 +10,15 @@ A specialization of https://hub.docker.com/_/maven/[`maven:3.9-eclipse-temurin-2
 - yq (lightweight yaml processor)
 - ssh
 - ssh agent
+- some extra scripts.
 
 == Used by
 
 === Api functional tests
 Tests are using it (they can use oc to port forward for JMX access)
 
-=== YQ Use
-Why is this included ?
+=== YQ
+YQ is s json parser, which can be used in some scripts.
 
 === Maven Release
 Image specifically created to perform a maven release. For this you need the ability to check out a branch (not detached head) and preform release commit using a private ssh key.
@@ -32,5 +33,11 @@ When running it expects an GITLAB_RUNNER_PRIVATE_KEY argument containing the pri
 ```
 
 
+== github actions
+
+For github actions we don't use this maven image.
+
+The 'after maven' script is usefull though, and this was wrapped
+in https://github.com/marketplace/actions/after-maven
 
 
