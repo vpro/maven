@@ -27,24 +27,25 @@ setProperty "SKIP_TESTS" "${SKIP_TESTS}" "$JOB_ENV"
 setProperty "SKIP_TESTS_IMPLICIT" "${SKIP_TESTS_IMPLICIT}" "$JOB_ENV"
 
 
-    
-    
+
+
 # make sure some files exist otherwise 'reports' gets confused
 if [ "${counts[0]}" -eq 0 ]; then
   echo no tests found. Making empty suites
-  mkdir -p empty/target/surefire-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml 
-  mkdir -p empty/target/failsafe-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml 
+  mkdir -p empty/target/surefire-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml
+  mkdir -p empty/target/failsafe-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml
 fi
 
 wc -l "$JOB_ENV"
 
-if [ -d target/site ]; then 
-  cp -r target/site/* public  
-else  
-  mkdir -p public 
-  date --iso-8601=seconds > public/date  
+if [ -d target/site ]; then
+  cp -r target/site/* public
+else
+  mkdir -p public
+  date --iso-8601=seconds > public/date
 fi
 
 # shellcheck disable=SC1090
 source "$JOB_ENV"
-
+cat "$JOB_ENV" | grep -v '=$'
+find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; |  xargs -0 stat -c"%Y %y %n" | sort -rn | awk '{print $5}' | xargs  xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt
