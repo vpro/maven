@@ -4,6 +4,17 @@
 
 JOB_ENV=${JOB_ENV:=job.env}
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+INPUT_DETERMINE_VERSION=${INPUT_DETERMINE_VERSION:='true'}
+INPUT_COVERAGE=${INPUT_COVERAGE:='true'}
+INPUT_PUBLIC=${INPUT_PUBLIC:='true'}
+
+if [ "$JOB_ENV" = "NO" ] ; then
+    has_job_env=false
+    JOB_ENV=$(mktemp);
+    #echo "No JOB_ENV Using $JOB_ENV"
+else
+    has_job_env=true
+fi
 
 
 setProperty(){
@@ -14,7 +25,9 @@ setProperty(){
   mv -f "$3".tmp "$3" >/dev/null
 }
 
-setProperty "PROJECT_VERSION" "$(mvn  -ntp help:evaluate -Dexpression=project.version -q -DforceStdout)" "$JOB_ENV"
+if [ "$INPUT_DETERMINE_VERSION" = 'true' ] ; then
+    setProperty "PROJECT_VERSION" "$(mvn  -ntp help:evaluate -Dexpression=project.version -q -DforceStdout)" "$JOB_ENV"
+fi
 
 mapfile -t counts < <(find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; | xargs -0 xsltproc "${SCRIPT_DIR}"/count.xslt | awk -F'[, ]+' 'BEGIN {t=0; f=0; e=0; s=0}  {t+=$3; f+=$5; e+=$7; s+=$9} END {print t"\n"f"\n"e"\n"s}' )
 
@@ -36,16 +49,33 @@ if [ "${counts[0]}" -eq 0 ]; then
   mkdir -p empty/target/failsafe-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml
 fi
 
-wc -l "$JOB_ENV"
+if $has_job_env ; then
+    wc -l "$JOB_ENV"
+fi
 
-if [ -d target/site ]; then
-  cp -r target/site/* public
-else
-  mkdir -p public
-  date --iso-8601=seconds > public/date
+if [ "$INPUT_INPUT" = "true" ] ; then
+   if [ -d target/site ]; then
+      cp -r target/site/* public
+   else
+      mkdir -p public
+      date --iso-8601=seconds > public/date
+   fi
 fi
 
 # shellcheck disable=SC1090
 source "$JOB_ENV"
+
+if [ "$INPUT_COVERAGE" = "true" ] ; then
+   for j in `find . -name jacoco.xml`; do   xsltproc --novalid  "${SCRIPT_DIR}"/jacoco.xslt $j ; done
+fi
+
 cat "$JOB_ENV" | grep -v '=$'
+
+if ! $has_job_env; then
+    rm $JOB_ENV
+fi
+
+
+
+
 find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; |  xargs -0 stat -c"%Y %y %n" | sort -rn | awk '{print $5}' | xargs  xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt

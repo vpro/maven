@@ -19,6 +19,8 @@ SKIP_INTEGRATION_TESTS=${SKIP_INTEGRATION_TESTS:-${SKIP_TESTS}}
 BUILD_TARGET=${1:-${BUILD_TARGET:-package}}
 export MAVEN_ARGS=${MAVEN_ARGS:=--no-transfer-progress}
 
+#WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+MAVEN_OPTS="--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow"
 
 OLD_X=${-//[^x]/}
 _exit() {
