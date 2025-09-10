@@ -65,8 +65,11 @@ mvn -ntp -T $MAVEN_THREADS \
        -Dmaven.test.failure.ignore=true  `: # Just use the result from after_maven.sh` \
        $PROFILES $BUILD_TARGET  ; result=$?
 echo "maven exit code: $result"
+
 . "${BASH_SOURCE%/*}/after_maven.sh"
+
 if [ -e "$JOB_ENV" ] ; then
+  echo sourcing $JOB_ENV
   source "$JOB_ENV"
   echo "Determining whether build failed fatally"
   if [ "$TEST_FAILURE_IGNORE" != "true" ] && [ "$SKIP_TESTS_IMPLICIT" != "true" ] ; then

@@ -4,8 +4,6 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="text" omit-xml-declaration="yes" indent="no"/>
 
-
-
   <!--
     Simple XSTL that just shows the errors and failures of junit XML result.
     @author Michiel Meeuwissen
