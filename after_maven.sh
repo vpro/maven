@@ -65,8 +65,12 @@ fi
 # shellcheck disable=SC1090
 source "$JOB_ENV"
 
+
 if [ "$INPUT_COVERAGE" = "true" ] ; then
+  echo "Determining coverage"
    for j in `find . -name jacoco.xml`; do   xsltproc --novalid  "${SCRIPT_DIR}"/jacoco.xslt $j ; done
+else
+   echo "Skipping coverage"
 fi
 
 cat "$JOB_ENV" | grep -v '=$'
