@@ -1,5 +1,5 @@
 echo Now branching
-"${BASH_SOURCE%/*}/setup_maven.sh"
+. "${BASH_SOURCE%/*}/setup_maven.sh"
 
 if [ -n "$MAVEN_RELEASE_PROFILES" ]; then
   PROFILES="-P${MAVEN_RELEASE_PROFILES}"

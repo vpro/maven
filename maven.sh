@@ -18,7 +18,7 @@ SKIP_TESTS=${SKIP_TESTS:-false}
 SKIP_INTEGRATION_TESTS=${SKIP_INTEGRATION_TESTS:-${SKIP_TESTS}}
 BUILD_TARGET=${1:-${BUILD_TARGET:-package}}
 
-"${BASH_SOURCE%/*}/setup_maven.sh"
+. "${BASH_SOURCE%/*}/setup_maven.sh"
 
 
 

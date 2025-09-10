@@ -8,7 +8,7 @@ if [ "$DRY_RUN" == 'true' ]; then
 fi
 set -x
 echo Running release for $CI_COMMIT_REF_NAME
-"${BASH_SOURCE%/*}/setup_maven.sh"
+. "${BASH_SOURCE%/*}/setup_maven.sh"
 
 if [ -n "$MAVEN_RELEASE_PROFILES" ]; then
   PROFILES="-P${MAVEN_RELEASE_PROFILES}"
