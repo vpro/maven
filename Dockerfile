@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.licenses="Apache-2.0"
 
 LABEL maintainer=digitaal-techniek@vpro.nl
 
-ENV YQ_VERSION=v4.45.4
+ENV YQ_VERSION=v4.47.2
 
 ADD entrypoint.sh /root/entrypoint.sh
 ADD after_maven.sh /root/after_maven.sh
