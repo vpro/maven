@@ -8,7 +8,7 @@ if [ "$DRY_RUN" == 'true' ]; then
 fi
 set -x
 echo Running release for $CI_COMMIT_REF_NAME
-
+"${BASH_SOURCE%/*}/setup_maven.sh"
 
 if [ -n "$MAVEN_RELEASE_PROFILES" ]; then
   PROFILES="-P${MAVEN_RELEASE_PROFILES}"
@@ -16,12 +16,6 @@ elif [ -n "$MAVEN_PROFILES" ]; then
   PROFILES="-P${MAVEN_PROFILES}"
 else
   PROFILES=""
-fi
-
-JAVA_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print $2}')
-if [ "$JAVA_VERSION" -ge 23 ]; then
-  #WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
-  MAVEN_OPTS="--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow"
 fi
 
 mvn --threads 1 \

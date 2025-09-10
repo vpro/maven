@@ -1,11 +1,5 @@
 echo Now branching
-export MAVEN_ARGS=${MAVEN_ARGS:=--no-transfer-progress}
-#WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
-JAVA_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print $2}')
-if [ "$JAVA_VERSION" -ge 23 ]; then
-  MAVEN_OPTS="--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow"
-fi
-
+"${BASH_SOURCE%/*}/setup_maven.sh"
 
 if [ -n "$MAVEN_RELEASE_PROFILES" ]; then
   PROFILES="-P${MAVEN_RELEASE_PROFILES}"

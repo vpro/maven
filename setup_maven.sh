@@ -12,6 +12,14 @@ export M2_ROOT=$CI_PROJECT_DIR/.m2
 mkdir -p $M2_ROOT
 
 cp -f $MVN_SETTINGS $M2_ROOT/settings.xml
+
+JAVA_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print $2}')
+if [ "$JAVA_VERSION" -ge 23 ]; then
+  #WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+  MAVEN_OPTS="$MAVEN_OPTS--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow"
+fi
+
+
 export MAVEN_OPTS="$MAVEN_OPTS -Dmaven.repo.local=$M2_ROOT/repository -Duser.home=./"
 
 echo "Set up MAVEN_OPTS $MAVEN_OPTS"
