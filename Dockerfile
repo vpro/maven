@@ -14,6 +14,9 @@ ADD maven_release.sh /root/maven_release.sh
 ADD maven_branch.sh /root/maven_branch.sh
 ADD maven.sh /root/maven.sh
 ADD count.xslt /root/count.xslt
+ADD failures_and_errors.xslt /root/failures_and_errors.xslt
+ADD jacoco.xslt /root/jacoco.xslt
+
 
 
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget openssh-client git rsync file xsltproc && \
