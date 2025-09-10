@@ -18,8 +18,11 @@ else
   PROFILES=""
 fi
 
-#WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
-MAVEN_OPTS="--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow"
+JAVA_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print $2}')
+if [ "$JAVA_VERSION" -ge 23 ]; then
+  #WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+  MAVEN_OPTS="--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow"
+fi
 
 mvn --threads 1 \
     -DpushChanges=false \
