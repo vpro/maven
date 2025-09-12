@@ -69,9 +69,7 @@ source "$JOB_ENV"
 if [ "$INPUT_COVERAGE" = "true" ] ; then
   if find . -name jacoco.xml | grep -q .; then
     echo "Determining coverage"
-    for j in `find . -name jacoco.xml`; do
-      xsltproc --novalid  "${SCRIPT_DIR}"/jacoco.xslt $j
-    done
+    find . -name jacoco.xml -exec xsltproc --novalid  "${SCRIPT_DIR}"/jacoco.xslt {} +
   else
     echo "No jacoco.xml found"
   fi
@@ -79,7 +77,7 @@ else
    echo "Skipping coverage"
 fi
 
-cat "$JOB_ENV" | grep -v '=$'
+ grep -v '=$' "$JOB_ENV"
 
 if ! $has_job_env; then
     rm $JOB_ENV
@@ -90,5 +88,5 @@ find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\
    xargs -0 stat -c"%Y %y %n" | \
    sort -rn | \
    awk '{print $5}' | \
-   xargs  xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt
-echo "/failures and errors"
+   xargs xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt
+echo "//failures and errors"
