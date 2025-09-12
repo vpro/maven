@@ -73,7 +73,6 @@ echo "maven exit code: $result"
 
 if [ -e "$JOB_ENV" ] ; then
   echo sourcing $JOB_ENV
-  cat $JOB_ENV
   source "$JOB_ENV"
   echo "Determining whether build failed fatally"
   if [ "$TEST_FAILURE_IGNORE" != "true" ] && [ "$SKIP_TESTS_IMPLICIT" != "true" ] ; then

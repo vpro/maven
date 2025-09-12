@@ -44,9 +44,10 @@ setProperty "SKIP_TESTS_IMPLICIT" "${SKIP_TESTS_IMPLICIT}" "$JOB_ENV"
 
 # make sure some files exist otherwise 'reports' gets confused
 if [ "${counts[0]}" -eq 0 ]; then
-  echo no tests found. Making empty suites
-  mkdir -p empty/target/surefire-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml
-  mkdir -p empty/target/failsafe-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml
+  echo no tests found.
+  #echo Making empty suites
+  #mkdir -p empty/target/surefire-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml
+  #mkdir -p empty/target/failsafe-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml
 fi
 
 if $has_job_env ; then
@@ -83,10 +84,10 @@ if ! $has_job_env; then
     rm $JOB_ENV
 fi
 
-echo "failures and errors ${SCRIPT_DIR}"
+#echo "failures and errors ${SCRIPT_DIR}"
 find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; | \
    xargs -0 stat -c"%Y %y %n" | \
    sort -rn | \
    awk '{print $5}' | \
    xargs xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt
-echo "//failures and errors"
+#echo "//failures and errors"
