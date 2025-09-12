@@ -9,24 +9,28 @@
     @author Michiel Meeuwissen
     August 2025
     -->
-  <xsl:param name="artifactIdPad" as="xs:double" select="20" />
+  <xsl:param name="artifactIdPad" as="xs:double" select="35" />
   <xsl:param name="namePad" as="xs:double" select="25" />
+  <xsl:param name="fileSeparator" as="xs:string" select="/testsuite/properties/property[@name = 'file.separator']/@value" />
 
   <xsl:variable name="spaces">
     <xsl:text>                                                                 </xsl:text>
   </xsl:variable>
-  <xsl:variable name="projectArtifactId">
-    <xsl:value-of select="/testsuite/properties/property[@name = 'projectArtifactId']/@value" />
+
+  <xsl:variable name="projectDir">
+    <xsl:call-template name="substring-after-last">
+      <xsl:with-param name="input" select="/testsuite/properties/property[@name = 'basedir']/@value"/>
+      <xsl:with-param name="delimiter" select="$fileSeparator"/>
+    </xsl:call-template>
   </xsl:variable>
-  <xsl:variable name="paddedProjectArtifactId">
-    <xsl:value-of select="$projectArtifactId" />
-    <xsl:value-of select="substring($spaces, 1, $artifactIdPad - string-length($projectArtifactId))" />
+  <xsl:variable name="paddedProjectDir">
+    <xsl:value-of select="$projectDir" />
+    <xsl:value-of select="substring($spaces, 1, $artifactIdPad - string-length($projectDir))" />
   </xsl:variable>
 
   <xsl:template match="/testsuite">
     <xsl:for-each select="testcase/failure | testcase/error">
-
-      <xsl:value-of select="$paddedProjectArtifactId" />
+      <xsl:value-of select="$paddedProjectDir" />
       <xsl:text> [</xsl:text>
       <xsl:value-of select="name(.)" />
       <xsl:text>]</xsl:text>
@@ -37,6 +41,31 @@
       <xsl:value-of select="../@classname" />
       <xsl:text>&#xa;</xsl:text>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="substring-after-last">
+    <xsl:param name="input" />
+    <xsl:param name="delimiter" />
+    <xsl:choose>
+      <xsl:when test="contains($input,$delimiter) and string-length(substring-after($input, $delimiter)) &gt; 0">
+        <xsl:call-template name="substring-after-last">
+          <xsl:with-param name="input"
+                          select="substring-after($input,$delimiter)" />
+          <xsl:with-param name="delimiter" select="$delimiter" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$input" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="/failsafe-summary">
+    <xsl:text>Summary: completed: </xsl:text><xsl:value-of select="completed" />
+    <xsl:text>, errors: </xsl:text><xsl:value-of select="errors" />
+    <xsl:text>, failures: </xsl:text><xsl:value-of select="failures" />
+    <xsl:text>, skipped: </xsl:text><xsl:value-of select="skipped" />
+    <xsl:text>&#xa;</xsl:text>
   </xsl:template>
 
 </xsl:stylesheet>
