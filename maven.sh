@@ -72,7 +72,6 @@ echo "maven exit code: $result"
 . "${BASH_SOURCE%/*}/after_maven.sh"
 
 if [ -e "$JOB_ENV" ] ; then
-  echo sourcing $JOB_ENV
   source "$JOB_ENV"
   echo "Determining whether build failed fatally"
   if [ "$TEST_FAILURE_IGNORE" != "true" ] && [ "$SKIP_TESTS_IMPLICIT" != "true" ] ; then
