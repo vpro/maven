@@ -85,9 +85,11 @@ if ! $has_job_env; then
 fi
 
 #echo "failures and errors ${SCRIPT_DIR}"
+if [ "${counts[0]}" -ge 0 ]; then
 find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; | \
    xargs -0 stat -c"%Y %y %n" | \
    sort -rn | \
    awk '{print $5}' | \
    xargs xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt
+fi
 #echo "//failures and errors"
