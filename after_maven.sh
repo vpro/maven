@@ -85,6 +85,10 @@ if ! $has_job_env; then
     rm $JOB_ENV
 fi
 
-echo "failures and errors"
-find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; |  xargs -0 stat -c"%Y %y %n" | sort -rn | awk '{print $5}' | xargs  xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt
-
+echo "failures and errors ${SCRIPT_DIR}"
+find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; | \
+   xargs -0 stat -c"%Y %y %n" | \
+   sort -rn | \
+   awk '{print $5}' | \
+   xargs  xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt
+echo "/failures and errors"

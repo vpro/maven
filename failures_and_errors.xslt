@@ -5,7 +5,7 @@
   <xsl:output method="text" omit-xml-declaration="yes" indent="no"/>
 
   <!--
-    Simple XSTL that just shows the errors and failures of junit XML result.
+    Simple XSLT that just shows the errors and failures of junit XML result.
     @author Michiel Meeuwissen
     August 2025
     -->
