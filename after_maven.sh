@@ -83,7 +83,7 @@ if ! $has_job_env; then
 fi
 
 #echo "failures and errors ${SCRIPT_DIR}"
-if [ "${counts[0]}" -ge 0 ]; then
+if [ "${counts[0]}" -gt 0 ]; then
   echo "${counts[0]} tests were run. Making overview"
   find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; | \
      xargs -n 1 -0 stat -c"%Y %y %n" | \
