@@ -42,12 +42,10 @@ setProperty "SKIP_TESTS_IMPLICIT" "${SKIP_TESTS_IMPLICIT}" "$JOB_ENV"
 
 
 
-# make sure some files exist otherwise 'reports' gets confused
 if [ "${counts[0]}" -eq 0 ]; then
-  echo no tests found.
-  #echo Making empty suites
-  #mkdir -p empty/target/surefire-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml
-  #mkdir -p empty/target/failsafe-reports ; echo '<testsuite />' >  empty/target/surefire-reports/TEST-empty.xml
+  echo no tests found
+else
+  echo "${counts[0]} tests"
 fi
 
 if $has_job_env ; then
