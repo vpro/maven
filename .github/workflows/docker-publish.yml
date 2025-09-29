@@ -71,7 +71,7 @@ jobs:
           push: true
           context: .
           file: 'Dockerfile.alpine'
-          tags: ${{ steps.meta-alpine.outputs.tags }}-alpine
+          tags: ${{ steps.meta-alpine.outputs.tags }}
           labels: ${{ steps.meta-alpine.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
