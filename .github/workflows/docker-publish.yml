@@ -62,10 +62,10 @@ jobs:
         with:
           push: true
           context: .
-          file: Dockerfile.alpine
+          file: 'Dockerfile.alpine'
           tags: ${{ steps.meta.outputs.tags }}-alpine
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
-          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=This image is used in CI/CD to buil
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=This image is used in CI/CD to build projects with maven (alpine version)
