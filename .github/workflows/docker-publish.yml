@@ -44,29 +44,28 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=tag
-      - name: Set tag suffix
-        id: tag_suffix
-        run: |
-          if [[ "${GITHUB_REF}" == refs/tags/* && "${GITHUB_REF##*/}" == * ]]; then
-            # Get branch name for the tag
-            BRANCH=$(git branch -r --contains "${GITHUB_REF}" | grep 'origin/alpine' || true)
-            if [[ -n "$BRANCH" ]]; then
-              echo "suffix=-alpine" >> $GITHUB_OUTPUT
-            else
-              echo "suffix=" >> $GITHUB_OUTPUT
-            fi
-          else
-            echo "suffix=" >> $GITHUB_OUTPUT
-          fi
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v6
         with:
           push: true
           context: .
-          tags: ${{ steps.meta.outputs.tags }}${{ steps.tag_suffix.outputs.suffix }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
           outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=This image is used in CI/CD to build projects with maven
+      - name: Build and push Alpine Docker image
+        id: build-and-push-alpine
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: .
+          file: Dockerfile.alpine
+          tags: ${{ steps.meta.outputs.tags }}-alpine
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=This image is used in CI/CD to buil
