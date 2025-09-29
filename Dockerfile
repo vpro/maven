@@ -17,7 +17,7 @@ ADD count.xslt /root/count.xslt
 ADD failures_and_errors.xslt /root/failures_and_errors.xslt
 ADD jacoco.xslt /root/jacoco.xslt
 
-
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget openssh-client git rsync file xsltproc && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
