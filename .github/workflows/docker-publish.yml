@@ -56,6 +56,14 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
           outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=This image is used in CI/CD to build projects with maven
+      - name: Extract Docker metadata for Alpine tag
+        id: meta-alpine
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch,suffix=-alpine
+            type=ref,event=tag,suffix=-alpine
       - name: Build and push Alpine Docker image
         id: build-and-push-alpine
         uses: docker/build-push-action@v6
@@ -63,8 +71,8 @@ jobs:
           push: true
           context: .
           file: 'Dockerfile.alpine'
-          tags: ${{ steps.meta.outputs.tags }}-alpine
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta-alpine.outputs.tags }}-alpine
+          labels: ${{ steps.meta-alpine.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
