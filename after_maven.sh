@@ -36,6 +36,7 @@ setProperty "MAVEN_TESTS_RUN" "${counts[0]}" "$JOB_ENV"
 setProperty "MAVEN_TESTS_FAILED" "${counts[1]}" "$JOB_ENV"
 setProperty "MAVEN_TESTS_ERROR" "${counts[2]}" "$JOB_ENV"
 setProperty "MAVEN_TESTS_SKIPPED" "${counts[3]}" "$JOB_ENV"
+setProperty "MAVEN_TESTS_NONSUCCESS" "$((counts[1] + counts[2]))" "$JOB_ENV"
 setProperty "SKIP_TESTS" "${SKIP_TESTS}" "$JOB_ENV"
 setProperty "SKIP_TESTS_IMPLICIT" "${SKIP_TESTS_IMPLICIT}" "$JOB_ENV"
 
@@ -84,11 +85,13 @@ fi
 
 #echo "failures and errors ${SCRIPT_DIR}"
 if [ "${counts[0]}" -gt 0 ]; then
-  echo "${counts[0]} tests were run. Making overview"
-  find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; | \
-     xargs -n 1 -0 stat -c"%Y %y %n" | \
-     sort -rn | \
-     awk '{print $5}' | \
-     xargs xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt
+  if [ $((counts[1] + counts[2])) -gt 0 ] ; then
+     echo "Making overview"
+     find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; | \
+       xargs -n 1 -0 stat -c"%Y %y %n" | \
+       sort -rn | \
+       awk '{print $5}' | \
+       xargs xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt
+   fi
 fi
 #echo "//failures and errors"
