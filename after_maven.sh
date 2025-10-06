@@ -4,7 +4,7 @@
 
 JOB_ENV=${JOB_ENV:=job.env}
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-INPUT_DETERMINE_VERSION=${INPUT_DETERMINE_VERSION:='true'}
+INPUT_DETERMINE_VERSION=${INPUT_DETERMINE_VERSION:='ifempty'}
 INPUT_COVERAGE=${INPUT_COVERAGE:='true'}
 INPUT_PUBLIC=${INPUT_PUBLIC:='true'}
 
@@ -25,7 +25,7 @@ setProperty(){
   mv -f "$3".tmp "$3" >/dev/null
 }
 
-if [ "$INPUT_DETERMINE_VERSION" = 'true' ] ; then
+if [ "$INPUT_DETERMINE_VERSION" = 'true' ] || { [ "$INPUT_DETERMINE_VERSION" = 'ifempty' ] && ! grep -q '^PROJECT_VERSION=' "$JOB_ENV"; }; then
     setProperty "PROJECT_VERSION" "$(mvn  -ntp help:evaluate -Dexpression=project.version -q -DforceStdout)" "$JOB_ENV"
 fi
 
