@@ -14,8 +14,13 @@ docker: Dockerfile after_maven.sh ## Build the docker file
 	docker build -t $(TARGET) .
 	touch $@
 
+docker_alpine: Dockerfile after_maven.sh ## Build the docker file
+	docker build -t $(TARGET)-alpine  -f Dockerfile.alpine .
+	touch $@
+
+
 explore: docker    ## Just give bash on it
-	docker run --entrypoint bash -it $(TARGET)
+	docker run -v `pwd`:/build  --entrypoint bash -it $(TARGET)
 
 
 exploremaven:      ## just run the maven docker image

@@ -17,12 +17,18 @@ MAVEN_THREADS=${MAVEN_THREADS:-2}
 SKIP_TESTS=${SKIP_TESTS:-false}
 SKIP_INTEGRATION_TESTS=${SKIP_INTEGRATION_TESTS:-${SKIP_TESTS}}
 BUILD_TARGET=${1:-${BUILD_TARGET:-package}}
-export MAVEN_ARGS=${MAVEN_ARGS:=--no-transfer-progress}
+
+. "${BASH_SOURCE%/*}/setup_maven.sh"
+
 
 
 OLD_X=${-//[^x]/}
 _exit() {
-   if [[ -n "$OLD_X" ]]; then set -x; else set +x; fi
+   if [[ -n "$OLD_X" ]]; then
+     set -x;
+   else
+     set +x;
+   fi
    echo "exit $1" ;
    exit $1
 }
@@ -63,13 +69,15 @@ mvn -ntp -T $MAVEN_THREADS \
        -Dmaven.test.failure.ignore=true  `: # Just use the result from after_maven.sh` \
        $PROFILES $BUILD_TARGET  ; result=$?
 echo "maven exit code: $result"
-"${BASH_SOURCE%/*}/after_maven.sh"
-source "$JOB_ENV"
-echo "Determining whether build failed fatally"
-cat "$JOB_ENV" | grep MAVEN_
-if [ "$TEST_FAILURE_IGNORE" != "true" ] && [ "$SKIP_TESTS_IMPLICIT" != "true" ] ; then
-   if [ $MAVEN_TESTS_ERROR -ge 1 ]; then echo "Test errors ($MAVEN_TESTS_ERROR). Exit 2"; _exit 2 ; fi
-   if [ $MAVEN_TESTS_FAILED -ge 1 ]; then echo "Failed test cases ($MAVEN_TESTS_FAILED). Exit 3";  _exit 3 ; fi
+. "${BASH_SOURCE%/*}/after_maven.sh"
+
+if [ -e "$JOB_ENV" ] ; then
+  source "$JOB_ENV"
+  echo "Determining whether build failed fatally"
+  if [ "$TEST_FAILURE_IGNORE" != "true" ] && [ "$SKIP_TESTS_IMPLICIT" != "true" ] ; then
+    if [ $MAVEN_TESTS_ERROR -ge 1 ]; then echo "Test errors ($MAVEN_TESTS_ERROR). Exit 2"; _exit 2 ; fi
+    if [ $MAVEN_TESTS_FAILED -ge 1 ]; then echo "Failed test cases ($MAVEN_TESTS_FAILED). Exit 3";  _exit 3 ; fi
+  fi
 fi
 if [[ $result -ne 0 ]]; then echo "Failed build exit $result"; _exit $((100 + $result)) ; fi
 _exit 0

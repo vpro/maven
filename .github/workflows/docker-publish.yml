@@ -3,7 +3,7 @@ name: Docker
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "alpine" ]
     tags: [ '*' ]
   workflow_dispatch:
 
@@ -14,6 +14,10 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
 
@@ -21,11 +25,9 @@ jobs:
     permissions:
       contents: read
       packages: write
-
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Log into registry ${{ env.REGISTRY }}
@@ -41,7 +43,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=branch
-            type=ref,event=tag                      
+            type=ref,event=tag
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v6
@@ -54,3 +56,24 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
           outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=This image is used in CI/CD to build projects with maven
+      - name: Extract Docker metadata for Alpine tag
+        id: meta-alpine
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch,suffix=-alpine
+            type=ref,event=tag,suffix=-alpine
+      - name: Build and push Alpine Docker image
+        id: build-and-push-alpine
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: .
+          file: 'Dockerfile.alpine'
+          tags: ${{ steps.meta-alpine.outputs.tags }}
+          labels: ${{ steps.meta-alpine.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=This image is used in CI/CD to build projects with maven (alpine version)
