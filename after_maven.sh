@@ -48,4 +48,4 @@ fi
 # shellcheck disable=SC1090
 source "$JOB_ENV"
 cat "$JOB_ENV" | grep -v '=$'
-find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; |  xargs -0 stat -c"%Y %y %n" | sort -rn | awk '{print $5}' | xargs  xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt
+find . \( -name 'surefire-reports' -o -name 'failsafe-reports' \) -exec find \{\} -name '*.xml' -print0   \; |  xargs -0 stat -c"%Y %y %n" | sort -rn | awk '{print $5}' | xargs  xsltproc --stringparam namePad 40 "${SCRIPT_DIR}"/failures_and_errors.xslt
