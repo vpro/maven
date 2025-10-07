@@ -91,7 +91,7 @@ if [ "${counts[0]}" -gt 0 ]; then
        xargs -n 1 -0 stat -c"%Y %y %n" | \
        sort -rn | \
        awk '{print $5}' | \
-       xargs xsltproc "${SCRIPT_DIR}"/failures_and_errors.xslt
+       xargs xsltproc --stringparam namePad 40 "${SCRIPT_DIR}"/failures_and_errors.xslt
    fi
 fi
 #echo "//failures and errors"
