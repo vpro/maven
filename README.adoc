@@ -4,13 +4,20 @@ Dedicated Maven Docker images which provides additional file resources needed.
 
 == Description
 
-A specialization of https://hub.docker.com/_/maven/[`maven:3.9-eclipse-temurin-25`] providing also
+A specialization of https://hub.docker.com/_/maven/[`maven:3.9-eclipse-temurin-25(-alpine)`] providing also
 
 - openshift cli (oc)
 - yq (lightweight yaml processor)
 - ssh
 - ssh agent
 - some extra scripts.
+
+== Versions and history
+
+Since version 34 also an 'alpine' version is build, which is smaller.
+
+Also since 34, the java version is 25 because that is LTS now.
+
 
 == Used by
 
