@@ -35,8 +35,7 @@ git checkout $SCM_TAG
 RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 export RELEASE_VERSION
 export NEW_TAG="REL-$RELEASE_VERSION"
-NEW_TAG_SLUG=$(echo $NEW_TAG | iconv -t ascii//TRANSLIT | sed -E -e 's/[^[:alnum:]]+/-/g' -e 's/^-+|-+$//g' | tr '[:upper:]' '[:lower:]')
-export NEW_TAG_SLUG
+NEW_TAG_SLUG=$(echo "$NEW_TAG" | sed -E -e 's/[^[:alnum:]]+/-/g' -e 's/^-+|-+$//g' | tr '[:upper:]' '[:lower:]')export NEW_TAG_SLUG
 echo "RELEASE_VERSION=$RELEASE_VERSION, SLUG $NEW_TAG_SLUG"
 git checkout "$CI_COMMIT_REF_NAME"
 
