@@ -11,7 +11,8 @@ fi
 
 VERSION=`mvn help:evaluate -Dexpression=project.version -q -DforceStdout`
 RELEASE_VERSION=`echo $VERSION | sed -r 's/-SNAPSHOT/.0-SNAPSHOT/'`
-DEVELOPMENT_VERSION=`echo $VERSION | perl -ne 'print sprintf("%s.%s%s%s", $1,$2+1,$3,$4) if /([0-9]+)\.([0-9]+)([\.-])(.*)/'`
+DEVELOPMENT_VERSION=`echo $VERSION | awk -F'[.-]' '{if (NF==3) print $1"."($2+1)"-"$3; else print $1"."($2+1)"."$3"-"$4}'`
+
 echo "Branching for $RELEASE_VERSION. Development version now $DEVELOPMENT_VERSION"
 mvn \
     -ntp -q -U \
