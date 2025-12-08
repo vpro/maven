@@ -41,8 +41,6 @@ setProperty "SKIP_TESTS" "${SKIP_TESTS}" "$JOB_ENV"
 setProperty "SKIP_TESTS_IMPLICIT" "${SKIP_TESTS_IMPLICIT}" "$JOB_ENV"
 
 
-
-
 if [ "${counts[0]}" -eq 0 ]; then
   echo no tests found
 else

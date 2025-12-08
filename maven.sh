@@ -57,17 +57,17 @@ if [ "$TRACE" == 'true' ]; then
 else
   set +x
 fi
-echo target $BUILD_TARGET
-echo "Threads: $MAVEN_THREADS"
-
-mvn -ntp -T $MAVEN_THREADS \
+ARGS="-ntp -T $MAVEN_THREADS \
       --fail-at-end \
       -U \
       --batch-mode \
       -DskipTests=$SKIP_TESTS \
       -DskipITs=$SKIP_INTEGRATION_TESTS \
        -Dmaven.test.failure.ignore=true  `: # Just use the result from after_maven.sh` \
-       $PROFILES $BUILD_TARGET  ; result=$?
+       $PROFILES $BUILD_TARGET"
+echo "Calling: mvn $ARGS"
+
+mvn $ARGS ; result=$?
 echo "maven exit code: $result"
 . "${BASH_SOURCE%/*}/after_maven.sh"
 
