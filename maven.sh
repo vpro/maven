@@ -65,6 +65,8 @@ ARGS="-ntp -T $MAVEN_THREADS \
       -DskipITs=$SKIP_INTEGRATION_TESTS \
        -Dmaven.test.failure.ignore=true  `: # Just use the result from after_maven.sh` \
        $PROFILES $BUILD_TARGET"
+
+
 echo "Calling: mvn $ARGS"
 
 mvn $ARGS ; result=$?
