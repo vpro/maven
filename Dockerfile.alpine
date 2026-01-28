@@ -16,7 +16,7 @@ COPY count.xslt /root/count.xslt
 COPY failures_and_errors.xslt /root/failures_and_errors.xslt
 COPY jacoco.xslt /root/jacoco.xslt
 
-RUN apk update && apk add --no-cache git libxslt && \
+RUN apk update && apk add --no-cache git libxslt nodejs && \
     ARCH=$(uname -m) && \
     case "$ARCH" in \
       x86_64) ARCH="amd64" ;; \
