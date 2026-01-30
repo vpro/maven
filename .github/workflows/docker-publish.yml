@@ -3,7 +3,7 @@ name: Docker
 
 on:
   push:
-    branches: [ "main", "alpine" ]
+    branches: [ "main" ]
     tags: [ '*' ]
   workflow_dispatch:
 
@@ -27,7 +27,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Log into registry ${{ env.REGISTRY }}
@@ -70,7 +70,7 @@ jobs:
         with:
           push: true
           context: .
-          file: 'Dockerfile.alpine'
+          file: 'alpine.Dockerfile'
           tags: ${{ steps.meta-alpine.outputs.tags }}
           labels: ${{ steps.meta-alpine.outputs.labels }}
           cache-from: type=gha
