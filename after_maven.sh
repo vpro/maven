@@ -60,8 +60,15 @@ if [ "$INPUT_INPUT" = "true" ] ; then
    fi
 fi
 
-# shellcheck disable=SC1090
-source "$JOB_ENV"
+if [ -e "$JOB_ENV" ] ; then
+    echo "Sourcing $JOB_ENV"
+    # shellcheck disable=SC1090
+    grep -v '=$' "$JOB_ENV"
+    source "$JOB_ENV"
+else
+    echo "$JOB_ENV does not exist"
+fi
+
 
 
 if [ "$INPUT_COVERAGE" = "true" ] ; then
@@ -76,9 +83,7 @@ else
 fi
 
 
-
 if ! $has_job_env; then
-    grep -v '=$' "$JOB_ENV"
     rm "$JOB_ENV"
 fi
 
