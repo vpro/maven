@@ -72,15 +72,17 @@ echo "Calling: mvn $ARGS"
 
 mvn $ARGS ; result=$?
 echo "maven exit code: $result"
-. "${BASH_SOURCE%/*}/after_maven.sh"
+
+source "${BASH_SOURCE%/*}/after_maven.sh"
 
 if [ -e "$JOB_ENV" ] ; then
   source "$JOB_ENV"
   echo "Determining whether build failed fatally"
   if [ "$TEST_FAILURE_IGNORE" != "true" ] && [ "$SKIP_TESTS_IMPLICIT" != "true" ] ; then
-      if [ $MAVEN_TESTS_ERROR -ge 1 ]; then echo "Test errors ($MAVEN_TESTS_ERROR). Exit 2"; _exit 2 ; fi
-      if [ $MAVEN_TESTS_FAILED -ge 1 ]; then echo "Failed test cases ($MAVEN_TESTS_FAILED). Exit 3";  _exit 3 ; fi
+      if [ $MAVEN_TESTS_ERROR -ge 1 ]; then echo "Test errors ($MAVEN_TESTS_ERROR)."; _exit 2 ; fi
+      if [ $MAVEN_TESTS_FAILED -ge 1 ]; then echo "Failed test cases ($MAVEN_TESTS_FAILED)";  _exit 3 ; fi
   fi
 fi
 if [[ $result -ne 0 ]]; then echo "Failed build exit $result"; _exit $((100 + $result)) ; fi
+echo "Successful maven script completion"
 _exit 0
