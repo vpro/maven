@@ -23,14 +23,21 @@ BUILD_TARGET=${1:-${BUILD_TARGET:-package}}
 
 
 OLD_X=${-//[^x]/}
+OLD_E=${-//[^e]/}
 _exit() {
    if [[ -n "$OLD_X" ]]; then
      set -x;
    else
      set +x;
    fi
+   if [[ -n "$OLD_E" ]]; then
+     set -e;
+   else
+     set +e;
+   fi
    echo "exit $1" ;
    exit $1
+
 }
 set +x
 if [ "$MAVEN_PROFILES" != "" ] ; then
@@ -70,7 +77,19 @@ ARGS="-ntp -T $MAVEN_THREADS \
 
 echo "Calling: mvn $ARGS"
 
+# If this script is sourced and the caller has 'set -e' enabled, a non-zero
+# exit from mvn would immediately exit the caller shell. Disable errexit
+# around the mvn invocation and restore the caller's -e setting afterwards.
+OLD_E=${-//[^e]/}
+set +e
 mvn $ARGS ; result=$?
+# restore errexit state to caller's original
+if [[ -n "$OLD_E" ]]; then
+  set -e
+else
+  set +e
+fi
+
 echo "maven exit code: $result"
 
 source "${BASH_SOURCE%/*}/after_maven.sh"
