@@ -75,10 +75,11 @@ else
    echo "Skipping coverage"
 fi
 
- grep -v '=$' "$JOB_ENV"
+
 
 if ! $has_job_env; then
-    rm $JOB_ENV
+    grep -v '=$' "$JOB_ENV"
+    rm "$JOB_ENV"
 fi
 
 #echo "failures and errors ${SCRIPT_DIR}"
