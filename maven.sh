@@ -61,6 +61,7 @@ ARGS="-ntp -T $MAVEN_THREADS \
       --fail-at-end \
       -U \
       --batch-mode \
+      --color always \
       -DskipTests=$SKIP_TESTS \
       -DskipITs=$SKIP_INTEGRATION_TESTS \
        -Dmaven.test.failure.ignore=true  `: # Just use the result from after_maven.sh` \
