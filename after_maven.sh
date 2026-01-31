@@ -25,7 +25,7 @@ setProperty(){
   mv -f "$3".tmp "$3" >/dev/null
 }
 
-if [ "$INPUT_DETERMINE_VERSION" = 'true' ] || { [ "$INPUT_DETERMINE_VERSION" = 'ifempty' ] && ! grep -q '^PROJECT_VERSION=' "$JOB_ENV"; }; then
+if [ "$INPUT_DETERMINE_VERSION" = 'true' ] || { [ "$INPUT_DETERMINE_VERSION" = 'ifempty' ] && ! grep -s -q '^PROJECT_VERSION=' "$JOB_ENV"; }; then
     setProperty "PROJECT_VERSION" "$(mvn  -ntp help:evaluate -Dexpression=project.version -q -DforceStdout)" "$JOB_ENV"
 fi
 
