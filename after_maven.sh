@@ -62,8 +62,7 @@ fi
 
 if [ -e "$JOB_ENV" ] ; then
     echo "Sourcing $JOB_ENV"
-    # shellcheck disable=SC1090
-    grep -v '=$' "$JOB_ENV"
+    grep -v "=''$" "$JOB_ENV" | sed "s/='\(.*\)'/=\1/g"
     source "$JOB_ENV"
 else
     echo "$JOB_ENV does not exist"
