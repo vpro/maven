@@ -21,7 +21,7 @@ setProperty(){
   if [ ! -e "$3" ] ; then
     touch "$3"
   fi
-  awk -v pat="^$1=" -v value="$1=$2" 'BEGIN {found=0; } { if ($0 ~ pat) { found=1; print value; } else print $0; } END { if (! found) print value  }' "$3" > "$3".tmp
+  awk -v pat="^$1=" -v value="$1='$2'" 'BEGIN {found=0; } { if ($0 ~ pat) { found=1; print value; } else print $0; } END { if (! found) print value  }' "$3" > "$3".tmp
   mv -f "$3".tmp "$3" >/dev/null
 }
 

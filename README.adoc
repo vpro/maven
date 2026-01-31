@@ -32,19 +32,20 @@ Image specifically created to perform a maven release. For this you need the abi
 
 When running it expects an GITLAB_RUNNER_PRIVATE_KEY argument containing the private key to use for git checkout and pushing of commits:
 
-```
+[source, bash]
+----
   docker run -it \
     --env "GITLAB_RUNNER_PRIVATE_KEY=$(cat ~/.ssh/id_rsa)" \
     ghcr.io/vpro/maven:latest \
     /bin/bash -c "git clone git@gitlab.com/npo-identity/poms/poms-maven.git && cd maven-release && mvn release:prepare release:perform"
-```
+----
 
 
 == github actions
 
 For github actions we don't use this maven image.
 
-The 'after maven' script is usefull though, and this was wrapped
+The 'after maven' script is useful though, and this was wrapped
 in https://github.com/marketplace/actions/after-maven
 
 
