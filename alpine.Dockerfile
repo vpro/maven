@@ -1,4 +1,4 @@
-FROM maven:3.9.12-eclipse-temurin-25-alpine
+FROM maven:3.9.15-eclipse-temurin-25-alpine
 
 LABEL org.opencontainers.image.description="This image is used in CI/CD to build projects with maven"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
