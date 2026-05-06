@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.description="This image is used in CI/CD to build
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 LABEL maintainer="digitaal-techniek@vpro.nl,michiel@mmprogrami.nl"
 
-ENV YQ_VERSION=v4.50.1
+ENV YQ_VERSION=v4.53.2
 
 COPY entrypoint.sh /root/entrypoint.sh
 COPY after_maven.sh /root/after_maven.sh
