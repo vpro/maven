@@ -1,11 +1,11 @@
-FROM maven:3.9.12-eclipse-temurin-25
+FROM maven:3.9.15-eclipse-temurin-25
 
 LABEL org.opencontainers.image.description="This image is used in CI/CD to build projects with maven"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 
 LABEL maintainer="digitaal-techniek@vpro.nl,michiel@mmprogrami.nl"
 
-ENV YQ_VERSION=v4.50.1
+ENV YQ_VERSION=v4.53.2
 
 COPY entrypoint.sh /root/entrypoint.sh
 COPY after_maven.sh /root/after_maven.sh
