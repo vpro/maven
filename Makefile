@@ -14,8 +14,8 @@ docker: Dockerfile after_maven.sh ## Build the docker file
 	docker build -t $(TARGET) .
 	touch $@
 
-docker_alpine: Dockerfile after_maven.sh ## Build the docker file
-	docker build -t $(TARGET)-alpine  -f Dockerfile.alpine .
+docker_alpine: alpine.Dockerfile after_maven.sh ## Build the docker file
+	docker build -t $(TARGET)-alpine  -f alpine.Dockerfile .
 	touch $@
 
 

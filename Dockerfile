@@ -2,7 +2,6 @@ FROM maven:3.9.16-eclipse-temurin-25
 
 LABEL org.opencontainers.image.description="This image is used in CI/CD to build projects with maven"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
-
 LABEL maintainer="digitaal-techniek@vpro.nl,michiel@mmprogrami.nl"
 
 ENV YQ_VERSION=v4.53.3
