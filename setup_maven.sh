@@ -6,7 +6,7 @@ if [[ "$TRACE" == "true" ]] ; then
 fi
 CI_PROJECT_DIR=${CI_PROJECT_DIR:=$(pwd)}
 MVN_SETTINGS=${MVN_SETTINGS:=~/.m2/settings.xml}
-export MAVEN_ARGS="--no-transfer-progress"
+export MAVEN_ARGS="--no-transfer-progress --color always"
 
 export MAVEN_OPTS="$MAVEN_OPTS -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS -Dorg.slf4j.simpleLogger.showDateTime=true"
 export M2_ROOT=$CI_PROJECT_DIR/.m2
