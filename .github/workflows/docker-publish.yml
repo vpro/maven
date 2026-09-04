@@ -44,6 +44,8 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=tag
+            type=pep440,pattern={{major}},event=tag
+            type=pep440,pattern={{major}}.{{minor}},event=tag
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v7
@@ -64,6 +66,8 @@ jobs:
           tags: |
             type=ref,event=branch,suffix=-alpine
             type=ref,event=tag,suffix=-alpine
+            type=pep440,pattern={{major}},event=tag,suffix=-alpine
+            type=pep440,pattern={{major}}.{{minor}},event=tag,suffix=-alpine
       - name: Build and push Alpine Docker image
         id: build-and-push-alpine
         uses: docker/build-push-action@v7
