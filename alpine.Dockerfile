@@ -1,5 +1,7 @@
 FROM maven:3.9.16-eclipse-temurin-25-alpine
 
+ARG TARGETARCH
+
 LABEL org.opencontainers.image.description="This image is used in CI/CD to build projects with maven"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 LABEL maintainer="digitaal-techniek@vpro.nl,michiel@mmprogrami.nl"
@@ -17,17 +19,15 @@ COPY failures_and_errors.xslt /root/failures_and_errors.xslt
 COPY jacoco.xslt /root/jacoco.xslt
 
 RUN apk update && apk add --no-cache git libxslt util-linux-misc && \
-    ARCH=$(uname -m) && \
-    case "$ARCH" in \
-      x86_64) ARCH="amd64" ;; \
-      aarch64) ARCH="arm64" ;; \
-      i386|i686) ARCH="386" ;; \
-    esac && \
-    YQ_BINARY="yq_linux_${ARCH}" && \
+    YQ_BINARY="yq_linux_${TARGETARCH}" && \
     wget -q https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}.tar.gz -O - | tar xz && \
     mv ${YQ_BINARY} /usr/bin/yq && \
-    curl -fsSL https://downloads-openshift-console.apps.cluster.chp5-prod.npocloud.nl/${ARCH}/linux/oc.tar --output oc.tar && \
-    tar xvf oc.tar && \
+    case "$TARGETARCH" in \
+        amd64) OC_SUFFIX="" ;; \
+        *)     OC_SUFFIX="-${TARGETARCH}" ;; \
+    esac && \
+    curl -LO https://mirror.openshift.com/pub/openshift-v5/clients/ocp/stable/openshift-client-linux${OC_SUFFIX}.tar.gz && \
+    tar -xvf openshift-client-linux${OC_SUFFIX}.tar.gz &&  \
     mv oc /usr/local/bin && \
     chmod +x /usr/local/bin/oc && \
     rm -f oc.tar && \

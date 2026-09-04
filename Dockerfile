@@ -1,5 +1,7 @@
 FROM maven:3.9.16-eclipse-temurin-25
 
+ARG TARGETARCH
+
 LABEL org.opencontainers.image.description="This image is used in CI/CD to build projects with maven"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 LABEL maintainer="digitaal-techniek@vpro.nl,michiel@mmprogrami.nl"
@@ -20,11 +22,14 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y wget openssh-client git rsync file xsltproc && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    ARCH=`dpkg --print-architecture` && \
-    YQ_BINARY=yq_linux_${ARCH} && \
+    YQ_BINARY=yq_linux_${TARGETARCH} && \
     wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}.tar.gz -O - | tar xz && mv ${YQ_BINARY} /usr/bin/yq && \
-    curl -fsSL https://downloads-openshift-console.apps.cluster.chp5-prod.npocloud.nl/${ARCH}/linux/oc.tar --output oc.tar && \
-    tar xvf oc.tar && \
+    case "$TARGETARCH" in \
+            amd64) OC_SUFFIX="" ;; \
+            *)     OC_SUFFIX="-${TARGETARCH}" ;; \
+    esac && \
+    curl -LO https://mirror.openshift.com/pub/openshift-v5/clients/ocp/stable/openshift-client-linux${OC_SUFFIX}.tar.gz && \
+    tar -xvf openshift-client-linux${OC_SUFFIX}.tar.gz &&  \
     mv oc /usr/local/bin && \
     chmod +x /usr/local/bin/oc && \
     rm -f oc.tar && \
