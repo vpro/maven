@@ -1,4 +1,4 @@
-FROM maven:3.9.16-eclipse-temurin-25-alpine
+FROM maven:3.10.0-eclipse-temurin-25-alpine
 
 ARG TARGETARCH
 
