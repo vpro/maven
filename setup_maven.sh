@@ -7,8 +7,7 @@ fi
 CI_PROJECT_DIR=${CI_PROJECT_DIR:=$(pwd)}
 MVN_SETTINGS=${MVN_SETTINGS:=~/.m2/settings.xml}
 export MAVEN_ARGS="--no-transfer-progress --color always"
-
-export MAVEN_OPTS="$MAVEN_OPTS -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS -Dorg.slf4j.simpleLogger.showDateTime=true"
+export MAVEN_OPTS="$MAVEN_OPTS -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS -Dorg.slf4j.simpleLogger.showDateTime=true -Djansi.mode=force"  # jansi.mode=force: otherwise ANSI from forked (surefire) JVMs is stripped when stdout is no TTY
 export M2_ROOT=$CI_PROJECT_DIR/.m2
 mkdir -p $M2_ROOT
 
@@ -29,7 +28,7 @@ JAVA_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print ($2 == 1 ? $3 
 echo "java version: $JAVA_VERSION"
 if [ "$JAVA_VERSION" -ge 23 ]; then
   #WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
-  MAVEN_OPTS="$MAVEN_OPTS--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow"
+  MAVEN_OPTS="$MAVEN_OPTS --enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow"
 fi
 
 export MAVEN_OPTS="$MAVEN_OPTS -Dmaven.repo.local=$M2_ROOT/repository -Duser.home=./"
