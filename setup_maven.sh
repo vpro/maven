@@ -1,3 +1,16 @@
+print_error() {
+    message=$1
+    >&2 echo -e "\e[31m$message\e[0m"
+}
+
+# This script is sourced, possibly more than once in the same shell (e.g. by the gitlab template and again by maven_branch.sh).
+# Don't append to MAVEN_OPTS/MAVEN_ARGS again then.
+if [[ "$MAVEN_SETUP_DONE" == "true" ]] ; then
+  echo "Maven already set up (MAVEN_OPTS $MAVEN_OPTS)"
+  return 0
+fi
+MAVEN_SETUP_DONE=true
+
 echo "Setup maven"
 if [[ "$TRACE" == "true" ]] ; then
   echo "Tracing"
@@ -10,11 +23,6 @@ export MAVEN_ARGS="--no-transfer-progress --color always"
 export MAVEN_OPTS="$MAVEN_OPTS -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS -Dorg.slf4j.simpleLogger.showDateTime=true -Djansi.mode=force"  # jansi.mode=force: otherwise ANSI from forked (surefire) JVMs is stripped when stdout is no TTY
 export M2_ROOT=$CI_PROJECT_DIR/.m2
 mkdir -p $M2_ROOT
-
-print_error() {
-    message=$1
-    >&2 echo -e "\e[31m$message\e[0m"
-}
 
 if [ -e "$MVN_SETTINGS" ] ; then
   cp -f $MVN_SETTINGS $M2_ROOT/settings.xml
